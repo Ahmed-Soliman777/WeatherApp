@@ -14,6 +14,8 @@ const WeatherApp = () => {
 
   let api_key = "ca8ab64c8aa212cc390eed9fddc35569"
 
+  const [weatherIcon, setWeatherIcon] = useState(clear_icon)
+
   const search = async () => {
     const element = document.getElementsByClassName("cityInput")
     if (element[0].value === "") {
@@ -30,10 +32,18 @@ const WeatherApp = () => {
     const temprature = document.getElementsByClassName("weather-temp")
     const location = document.getElementsByClassName("weather-location")
 
-    humidity[0].innerHTML = data.main.humidity+"%";
-    wind[0].innerHTML = data.wind.speed+"km/h";
-    temprature[0].innerHTML = data.main.temp+"c";
-    location[0].innerHTML = data.name;
+    humidity[0].innerHTML = Math.floor(data.main.humidity) + "%";
+    wind[0].innerHTML = Math.floor(data.wind.speed) + "km/h";
+    temprature[0].innerHTML = Math.floor(data.main.temp) + "c"
+    location[0].innerHTML = data.name
+
+    if (data.weather[0].icon === "01d" || data.weather[0].icon === "01n") { setWeatherIcon(clear_icon) }
+    else if (data.weather[0].icon === "02d" || data.weather[0].icon === "02n") { setWeatherIcon(cloud_icon) }
+    else if (data.weather[0].icon === "03d" || data.weather[0].icon === "03n") { setWeatherIcon(drizzle_icon) }
+    else if (data.weather[0].icon === "04d" || data.weather[0].icon === "04n") { setWeatherIcon(drizzle_icon) }
+    else if (data.weather[0].icon === "09d" || data.weather[0].icon === "09n") { setWeatherIcon(rain_icon) }
+    else if (data.weather[0].icon === "10d" || data.weather[0].icon === "10n") { setWeatherIcon(snow_icon) }
+    else {setWeatherIcon(clear_icon)}
   }
 
   return (
@@ -41,11 +51,11 @@ const WeatherApp = () => {
       <div className="top-bar">
         <input type="text" className="cityInput" placeholder='search' />
         <div className="search-icon">
-          <img src={search_icon} alt="search icon" />
+          <img src={search_icon} alt="search icon" onClick={() => { search() }} />
         </div>
       </div>
       <div className="weather-image">
-        <img src={cloud_icon} alt="weather icon" />
+        <img src={weatherIcon} alt="icon" />
       </div>
       <div className="weather-temp">24 c</div>
       <div className="weather-location">Cairo</div>
